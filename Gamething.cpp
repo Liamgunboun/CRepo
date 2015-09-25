@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
+#include <conio.h>
 #define ROWS 20
 #define COLS 20
 #define INV 10
@@ -44,31 +45,36 @@ int main (){
           DrawGrid(Board, ChX, ChY);
           //Finding Where To Move Him  
           printf("Up(u) Down(d) Left(l) Or Right(r)?\n");      
-          scanf("%c",&Inp);
+          //scanf("%c",&Inp);
           Board[ChX][ChY]='#';
-          switch(Inp) {
-                      case 'u':
+          printf("%s",PlayerInv[1]);
+          if (getch()==224){
+          switch(getch()) {
+                      case '72':
                            if (ChY>0)
                            ChY--;
                            break;
-                      case 'd':
+                      case '80':
                            if (ChY<COLS-1)
                            ChY++;
                            break;
-                      case 'l':
+                      case '75':
                            if (ChX>0)
                            ChX--;
                            break;
-                      case 'r':
+                      case '77':
                            if (ChX<COLS-1)
                            ChX++;
                            break;  
                       default:
                               printf("\n");                    
                       }
+          }
           switch(ChX,ChY){
               case (13|10):
-                  PlayerInv[1]="Sword    "; //Give Him sword
+                  strcpy("Sword", PlayerInv[1]);//Give Him sword
+                  printf("You Got a sword!");
+                  system("pause"); 
               default:
                   "\n";                         
           }
