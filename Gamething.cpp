@@ -19,7 +19,44 @@ void DrawGrid (char GmBoard[ROWS][COLS], int CharX, int CharY){
      
 }
 
-
+void ArrowKeys(int *ChXP,int *ChYP){
+	bool moved = false;
+	while (moved==false){
+	 if (getch()==224){
+          switch(getch()) {
+                      case 72:
+                      	
+                           if (*ChYP>0)						   
+                           		*ChYP--;
+                           moved = true;
+                           break;
+                       	   
+                      case 80:
+                           if (*ChYP < COLS-1)					
+                          		 *ChYP++;
+						   moved = true;
+                           break;
+                           
+                      case 75:
+                           if (*ChXP > 0)					   
+                          		 *ChXP--;						   
+                           moved = true;
+                           break;
+                           
+                      case 77:
+                           if (*ChXP < COLS-1)					   
+                           		*ChXP++;                           
+                           moved = true;
+                           break;   
+					       
+                         }
+                      }
+         }
+         printf("Char Y cord pointer : - %i -, Char x cord pointer : - %i -\n",&ChYP,&ChXP);
+		 printf("Char Y Cord (normally 9): - %i - ,Char x Cord (normally 9): - %i -\n",*ChYP,*ChXP);
+      moved = false;
+      system("pause");
+}
  
 int main (){    
     SetConsoleTitle("Exploration :D");
@@ -28,7 +65,9 @@ int main (){
     char PlayerInv [INV][INV];
     char Inp;  
     int ChX = ROWS/2-1;
-    int ChY = COLS/2-1;    
+    int ChY = COLS/2-1;
+	int *ChYP = &ChY;
+	int *ChXP = &ChX;    
     //Initialize
     Board[ChX][ChY]='@';
     for(int i=0;i<ROWS;i++){              
@@ -38,7 +77,7 @@ int main (){
                       PlayerInv[i][j]=' ';
               }             
     }
-    
+
     //Move Him Around A Bit   
     while (true){  
           //Show The grid
@@ -47,29 +86,9 @@ int main (){
           printf("Up(u) Down(d) Left(l) Or Right(r)?\n");      
           //scanf("%c",&Inp);
           Board[ChX][ChY]='#';
-          printf("%s",PlayerInv[1]);
-          if (getch()==224){
-          switch(getch()) {
-                      case '72':
-                           if (ChY>0)
-                           ChY--;
-                           break;
-                      case '80':
-                           if (ChY<COLS-1)
-                           ChY++;
-                           break;
-                      case '75':
-                           if (ChX>0)
-                           ChX--;
-                           break;
-                      case '77':
-                           if (ChX<COLS-1)
-                           ChX++;
-                           break;  
-                      default:
-                              printf("\n");                    
-                      }
-          }
+          //printf("%s",PlayerInv[1]);
+           ArrowKeys(ChXP,ChYP);
+           /*
           switch(ChX,ChY){
               case (13|10):
                   strcpy("Sword", PlayerInv[1]);//Give Him sword
@@ -78,6 +97,7 @@ int main (){
               default:
                   "\n";                         
           }
+          */
     }
                    
    
