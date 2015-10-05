@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <conio.h>
 #include <time.h>
+#include <math.h>
 
 #define MAX_RECTS 25
 #define MPW_BOT  0
@@ -35,7 +36,6 @@ int menu()
 }
 
 
-
 //Generate Rectangles_--------------------------------------------------------
 Rectangle GenRect()
 {
@@ -58,24 +58,31 @@ return (RandomRect);
 Rectangle ManualRect ()
 {
 	struct Rectangle RandomRect;
-	printf("\n\nEnter The Rectangle Bottom: ");
+	printf("\n\nEnter the rectangle bottom: ");
 	scanf("%i",  &RandomRect.Bot);
-	printf("\n\nEnter The Rectangle Top: ");
+	printf("\n\nEnter the rectangle top: ");
 	scanf("%i", &RandomRect.Top);
-	printf("\n\nEnter The Rectangle Left: ");
+	printf("\n\nEnter the rectangle left: ");
 	scanf("%i", &RandomRect.Left);
-	printf("\n\nEnter The Rectangle Right: ");
+	printf("\n\nEnter the rectangle right: ");
 	scanf("%i", &RandomRect.Right);
 	
 	  
-	//for (int i=0; i<4; i++)
-//	{	
-	printf("\n\nEnter Name. Cuts off if more than 4 chars ");
-	scanf("%s", &RandomRect.Name);
-//	}	
+	printf("\n\nEnter name. Cuts off if more than 4 chars ");
+	scanf("%s", &RandomRect.Name);	
 	RandomRect.Name[4]  = 0;
 	
 	return(RandomRect);
+}
+
+//Point Within?
+string PointWithin(Rectangle Rect1,int X,int Y){
+	
+	if (X>Rect1.Left && X<Rect1.Right && Y > Rect1.Bot && Y < Rect1.Top)
+		return ("The point is within the rectangle.");
+	
+	return ("The point is not within the rectangle.");
+	
 }
 
 //Show Rects.------------------------------------------------------------------
@@ -84,10 +91,18 @@ void PrintRect (Rectangle RandomRect[MAX_RECTS], int NumBoxes)
 {
 	for (int i=0; i < NumBoxes; i++ )
 	{	
-	printf("\n%s = Bot %i, Top %i, Left %i, Right %i",RandomRect[i].Name, RandomRect[i].Bot, RandomRect[i].Top, RandomRect[i].Left, RandomRect[i].Right);	
+	printf("\n%i %s =    Bottom Left %i , %i    Top Right %i , %i",i+1,RandomRect[i].Name, RandomRect[i].Left, RandomRect[i].Bot, RandomRect[i].Right, RandomRect[i].Top);	
 	}
 }
 
+
+// Find Intersection Points
+void Intersection (Rectangle Rect2,Rectangle Rect1)
+{
+	
+	if (Rect1.Left < Rect2.Right && Rect1.Bot < Rect2.Top && Rect2.Left < Rect1.Right && Rect2.Bot < Rect1.Top || Rect2.Left < Rect1.Right && Rect2.Bot < Rect1.Top && Rect1.Left < Rect2.Right && Rect1.Bot < Rect2.Top)
+		printf("The resulting rectangles points are: %i , %i    %i , %i",(Rect1.Left < Rect2.Left)?Rect2.Left:Rect1.Left,  (Rect1.Bot < Rect2.Bot)?Rect2.Bot:Rect1.Bot,  (Rect1.Right > Rect2.Right)?Rect2.Right:Rect1.Right,  (Rect1.Top > Rect2.Top)?Rect2.Top:Rect1.Top);
+}
 
 
 //Main Function--------------------------------------------------------------------------------
@@ -96,25 +111,26 @@ int main()
 	srand(time (NULL));
 	struct Rectangle RandomRect[MAX_RECTS];
 	Rectangle r;
-	int NumBoxes,TempNum;
+	bool Run = true;
+	int NumBoxes= 100;
+	int TempNum,TempNum2,TempNum3;
+	
+	//How many you want?
+	while (NumBoxes>25)
+	{
 	printf(" How many boxes you want? (max 25): ");
 	scanf("%i",&NumBoxes);
-
-	
-	
-	for (int i=0; i < MAX_RECTS; i++)
-	{	
-		if (i<NumBoxes)
-		{		
-			RandomRect[i] = GenRect();	
-		} 
-		else 
-		{		
-			RandomRect[i] = 0;
-		}
 	}
 	
-	while (true){
+	//Initialize Boxes
+	for (int i=0; i < MAX_RECTS; i++)
+	{	
+		RandomRect[i] = GenRect();		
+	}
+	
+	//Main Run Loop
+	while (Run=true)
+	{
 
 		printf("%i",NumBoxes);
 		PrintRect(RandomRect, NumBoxes);
@@ -122,7 +138,7 @@ int main()
 		switch (menu())
 		{
 			case '1':
-				printf("\n\nEnter The Rectangle Number You'd Like To Write To: ");
+				printf("\n\nEnter the rectangle number you'd like to write to: ");
 				scanf("%i",&TempNum);
 				if (TempNum>NumBoxes)
 				{
@@ -132,8 +148,9 @@ int main()
 					RandomRect[TempNum-1]=ManualRect();
 				}
 				break;
+				
 			case '2':
-				printf("\n\nEnter The Rectangle Number You'd Like To Delete: ");
+				printf("\n\nEnter the rectangle number you'd like to delete: ");
 				scanf("%i",&TempNum);
 				for (int i=0; i < (NumBoxes); i++)
 				{
@@ -141,14 +158,35 @@ int main()
 				}
 				NumBoxes-=1;
 				break;
+				
+			case '3':
+				printf("\n\nEnter the first rectangle to compare: ");
+				scanf("%i",&TempNum);
+				printf("\n\nEnter the second rectangle to compare: ");
+				scanf("%i",&TempNum2);
+				Intersection(RandomRect[TempNum-1],RandomRect[TempNum2-1]);
+				break;
+				
+			case '6':
+				printf("\n\nEnter the X coodinate: ");
+				scanf("%i",&TempNum);
+				printf("\n\nEnter the X coodinate: ");
+				scanf("%i",&TempNum2);
+				printf("\n\nEnter the rectangle to compare: ");
+				scanf("%i",&TempNum3);
+				
+				printf("\n%s",PointWithin(RandomRect[TempNum3],TempNum,TempNum2))
+				
+			case '7':
+				Run=false;
+				break;
+				
 			default:
-				printf("\n Either Invalid Selection or Not yet implemented feature :(");
-		
+				printf("\n Either invalid selection or not yet implemented feature :(");		
 		}
 	
-		getch();
-		}
+	}
 		
-		getch();
+	getch();
 	return 0;
 }

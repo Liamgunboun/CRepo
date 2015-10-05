@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <conio.h>
 #include <time.h>
+#include <math.h>
 
 #define MAX_RECTS 25
 #define MPW_BOT  0
@@ -68,11 +69,8 @@ Rectangle ManualRect ()
 	scanf("%i", &RandomRect.Right);
 	
 	  
-	//for (int i=0; i<4; i++)
-//	{	
 	printf("\n\nEnter Name. Cuts off if more than 4 chars ");
-	scanf("%s", &RandomRect.Name);
-//	}	
+	scanf("%s", &RandomRect.Name);	
 	RandomRect.Name[4]  = 0;
 	
 	return(RandomRect);
@@ -84,10 +82,18 @@ void PrintRect (Rectangle RandomRect[MAX_RECTS], int NumBoxes)
 {
 	for (int i=0; i < NumBoxes; i++ )
 	{	
-	printf("\n%s = Bot %i, Top %i, Left %i, Right %i",RandomRect[i].Name, RandomRect[i].Bot, RandomRect[i].Top, RandomRect[i].Left, RandomRect[i].Right);	
+	printf("\n%i %s =    Bottom Left %i , %i    Top Right %i , %i",i+1,RandomRect[i].Name, RandomRect[i].Left, RandomRect[i].Bot, RandomRect[i].Right, RandomRect[i].Top);	
 	}
 }
 
+
+// Find Intersection Points
+void Intersection (Rectangle Rect2,Rectangle Rect1)
+{
+	
+	if (Rect1.Left < Rect2.Right && Rect1.Bot < Rect2.Top && Rect2.Left < Rect1.Right && Rect2.Bot < Rect1.Top || Rect2.Left < Rect1.Right && Rect2.Bot < Rect1.Top && Rect1.Left < Rect2.Right && Rect1.Bot < Rect2.Top)
+		printf("The Resulting Rectangles points are: %i , %i    %i , %i",(Rect1.Left < Rect2.Left)?Rect2.Left:Rect1.Left,  (Rect1.Bot < Rect2.Bot)?Rect2.Bot:Rect1.Bot,  (Rect1.Right > Rect2.Right)?Rect2.Right:Rect1.Right,  (Rect1.Top > Rect2.Top)?Rect2.Top:Rect1.Top);
+}
 
 
 //Main Function--------------------------------------------------------------------------------
@@ -96,22 +102,18 @@ int main()
 	srand(time (NULL));
 	struct Rectangle RandomRect[MAX_RECTS];
 	Rectangle r;
-	int NumBoxes,TempNum;
+	int NumBoxes= 100;
+	int TempNum,TempNum2;
+	while (NumBoxes>25)
+	{
 	printf(" How many boxes you want? (max 25): ");
 	scanf("%i",&NumBoxes);
-
+	}
 	
 	
 	for (int i=0; i < MAX_RECTS; i++)
 	{	
-		if (i<NumBoxes)
-		{		
-			RandomRect[i] = GenRect();	
-		} 
-		else 
-		{		
-			RandomRect[i] = 0;
-		}
+		RandomRect[i] = GenRect();		
 	}
 	
 	while (true){
@@ -132,6 +134,7 @@ int main()
 					RandomRect[TempNum-1]=ManualRect();
 				}
 				break;
+				
 			case '2':
 				printf("\n\nEnter The Rectangle Number You'd Like To Delete: ");
 				scanf("%i",&TempNum);
@@ -140,6 +143,14 @@ int main()
 					RandomRect[TempNum-2+i]=RandomRect[TempNum-1+i];
 				}
 				NumBoxes-=1;
+				break;
+				
+			case '3':
+				printf("\n\nEnter The First Rectangle To Compare: ");
+				scanf("%i",&TempNum);
+				printf("\n\nEnter The Second Rectangle To Compare: ");
+				scanf("%i",&TempNum2);
+				Intersection(RandomRect[TempNum-1],RandomRect[TempNum2-1]);
 				break;
 			default:
 				printf("\n Either Invalid Selection or Not yet implemented feature :(");
