@@ -118,18 +118,20 @@ void Intersection (Rectangle Rect2,Rectangle Rect1)
 
 // Rectangle Identifier
 
-int RectIdentify (char name1[5], Rectangle RandomRects[MAX_RECTS])
+int RectIdentify (Rectangle RandomRects[MAX_RECTS])
 {
 	int RectNum1,RectNum2;
 	bool Name1Found = false;
 	char TempStr[5];
-	
+	TempStr[5]=0;
 	for (int i = 0; i < 5; i ++)
 	{
 		TempStr[i]=getch();
 		fflush (stdin);
+		printf("%s",TempStr);
 	}
-	printf("Fetching Rectangle....");
+	
+	printf("Fetching Rectangle....\n\n");
 	
 
 	
@@ -137,9 +139,9 @@ int RectIdentify (char name1[5], Rectangle RandomRects[MAX_RECTS])
 	{
 		for (int i = 0; i < 5; i++)
 		{
-			if (RandomRects[RectNum1].Name[i] != name1[i])
+			if (RandomRects[RectNum1].Name[i] != TempStr[i])
 				break;
-			if (RandomRects[RectNum1].Name[i] == name1[i] && i == 4)
+			if (RandomRects[RectNum1].Name[i] == TempStr[i] && i == 4)
 			{			
 				Name1Found = true;
 				break;
@@ -188,9 +190,8 @@ int main()
 		switch (menu())
 		{
 			case '1':
-				printf("\n\nEnter the rectangle number you'd like to write to: ");
-				scanf("%i",&TempNum);
-				
+				printf("\n\nEnter the rectangle name you'd like to write to: ");
+				TempNum=RectIdentify(RandomRect);
 				if (TempNum>NumBoxes)
 				{
 					NumBoxes+=1;

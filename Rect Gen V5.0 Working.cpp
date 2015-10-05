@@ -99,61 +99,11 @@ void PrintRect (Rectangle RandomRect[MAX_RECTS], int NumBoxes)
 // Find Intersection Points
 void Intersection (Rectangle Rect2,Rectangle Rect1)
 {
-	bool condition[8] = {Rect1.Left < Rect2.Right, Rect1.Bot < Rect2.Top, Rect2.Left < Rect1.Right, Rect2.Bot < Rect1.Top, Rect2.Left < Rect1.Right,
-	Rect2.Bot < Rect1.Top, Rect1.Left < Rect2.Right,Rect1.Bot < Rect2.Top};
-	bool condition2[4];	
 	
-	if (condition[0] && condition[1] && condition[2] && condition[3] || condition[4] && condition[5] && condition[6] && condition[7]){
-
-		printf("The resulting rectangles points are: %i , %i    %i , %i\n\n",
-		(Rect1.Left < Rect2.Left) ? Rect2.Left:Rect1.Left, 
-		(Rect1.Bot < Rect2.Bot) ? Rect2.Bot:Rect1.Bot,  
-		(Rect1.Right > Rect2.Right) ? Rect2.Right:Rect1.Right, 
-		(Rect1.Top > Rect2.Top) ? Rect2.Top:Rect1.Top);
-		
-	} else {
-		printf ("They do not intersect :(....\n\n");
-	}
+	if (Rect1.Left < Rect2.Right && Rect1.Bot < Rect2.Top && Rect2.Left < Rect1.Right && Rect2.Bot < Rect1.Top || Rect2.Left < Rect1.Right && Rect2.Bot < Rect1.Top && Rect1.Left < Rect2.Right && Rect1.Bot < Rect2.Top)
+		printf("The resulting rectangles points are: %i , %i    %i , %i",(Rect1.Left < Rect2.Left)?Rect2.Left:Rect1.Left,  (Rect1.Bot < Rect2.Bot)?Rect2.Bot:Rect1.Bot,  (Rect1.Right > Rect2.Right)?Rect2.Right:Rect1.Right,  (Rect1.Top > Rect2.Top)?Rect2.Top:Rect1.Top);
 }
 
-// Rectangle Identifier
-
-int RectIdentify (char name1[5], Rectangle RandomRects[MAX_RECTS])
-{
-	int RectNum1,RectNum2;
-	bool Name1Found = false;
-	char TempStr[5];
-	
-	for (int i = 0; i < 5; i ++)
-	{
-		TempStr[i]=getch();
-		fflush (stdin);
-	}
-	printf("Fetching Rectangle....");
-	
-
-	
-	for (RectNum1=0 ; RectNum1 < MAX_RECTS + 1 ; RectNum1 ++)
-	{
-		for (int i = 0; i < 5; i++)
-		{
-			if (RandomRects[RectNum1].Name[i] != name1[i])
-				break;
-			if (RandomRects[RectNum1].Name[i] == name1[i] && i == 4)
-			{			
-				Name1Found = true;
-				break;
-			}
-		}
-		if (Name1Found == true)
-			break;
-		
-	}
-		
-	
-	
-	return (RectNum1);
-}
 
 //Main Function--------------------------------------------------------------------------------
 int main()
@@ -164,7 +114,6 @@ int main()
 	bool Run = true;
 	int NumBoxes= 100;
 	int TempNum,TempNum2,TempNum3;
-
 	
 	//How many you want?
 	while (NumBoxes>25)
@@ -190,7 +139,6 @@ int main()
 			case '1':
 				printf("\n\nEnter the rectangle number you'd like to write to: ");
 				scanf("%i",&TempNum);
-				
 				if (TempNum>NumBoxes)
 				{
 					NumBoxes+=1;
@@ -216,7 +164,6 @@ int main()
 				printf("\n\nEnter the second rectangle to compare: ");
 				scanf("%i",&TempNum2);
 				Intersection(RandomRect[TempNum-1],RandomRect[TempNum2-1]);
-				getch();
 				break;
 				
 			case '6':
