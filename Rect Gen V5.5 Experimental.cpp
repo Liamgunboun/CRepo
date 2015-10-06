@@ -4,6 +4,7 @@
 #include <conio.h>
 #include <time.h>
 #include <math.h>
+##include <string.h>
 
 #define MAX_RECTS 25
 #define MPW_BOT  0
@@ -83,6 +84,28 @@ const char *PointWithin(Rectangle Rect1,int X,int Y)
 	
 	return ("The point is not within the rectangle.");
 	
+	
+}
+
+//Find Union
+
+void Union (Rectangle Rect2,Rectangle Rect1){
+	
+	//bool condition[8] = {Rect1.Left < Rect2.Right, Rect1.Bot < Rect2.Top, Rect2.Left < Rect1.Right, Rect2.Bot < Rect1.Top, Rect2.Left < Rect1.Right,
+//	Rect2.Bot < Rect1.Top, Rect1.Left < Rect2.Right,Rect1.Bot < Rect2.Top};
+//	bool condition2[4];	
+	
+//	if (condition[0] && condition[1] && condition[2] && condition[3] || condition[4] && condition[5] && condition[6] && condition[7]){
+
+		printf("The resulting rectangles points are: %i , %i    %i , %i\n\n",
+		(Rect1.Left > Rect2.Left) ? Rect2.Left:Rect1.Left, 
+		(Rect1.Bot > Rect2.Bot) ? Rect2.Bot:Rect1.Bot,  
+		(Rect1.Right < Rect2.Right) ? Rect2.Right:Rect1.Right, 
+		(Rect1.Top < Rect2.Top) ? Rect2.Top:Rect1.Top);
+
+	
+	
+	
 }
 
 //Show Rects.------------------------------------------------------------------
@@ -110,7 +133,7 @@ void Intersection (Rectangle Rect2,Rectangle Rect1)
 		(Rect1.Bot < Rect2.Bot) ? Rect2.Bot:Rect1.Bot,  
 		(Rect1.Right > Rect2.Right) ? Rect2.Right:Rect1.Right, 
 		(Rect1.Top > Rect2.Top) ? Rect2.Top:Rect1.Top);
-		
+		 
 	} else {
 		printf ("They do not intersect :(....\n\n");
 	}
@@ -124,11 +147,19 @@ int RectIdentify (Rectangle RandomRects[MAX_RECTS])
 	bool Name1Found = false;
 	char TempStr[5];
 	TempStr[5]=0;
-	for (int i = 0; i < 5; i ++)
-	{
-		TempStr[i]=getch();
-		fflush (stdin);
-		printf("%s",TempStr);
+	
+	while (true){
+	TempStr=gets();
+		if (strlen(TempStr)>4)
+		{
+			for (int i = 0; i<5; i++)
+			{
+				
+			}
+		
+		}
+	
+	
 	}
 	
 	printf("Fetching Rectangle....\n\n");
@@ -171,8 +202,9 @@ int main()
 	//How many you want?
 	while (NumBoxes>25)
 	{
-	printf(" How many boxes you want? (max 25): ");
-	scanf("%i",&NumBoxes);
+		fflush(stdin);
+		printf(" How many boxes you want? (max 25): ");
+		scanf("%i",&NumBoxes);
 	}
 	
 	//Initialize Boxes
@@ -195,34 +227,46 @@ int main()
 				if (TempNum>NumBoxes)
 				{
 					NumBoxes+=1;
-					RandomRect[NumBoxes-1]=ManualRect();
+					RandomRect[NumBoxes]=ManualRect();
 				} else {				
-					RandomRect[TempNum-1]=ManualRect();
+					RandomRect[TempNum]=ManualRect();
 				}
+				getch();
 				break;
 				
 			case '2':
-				printf("\n\nEnter the rectangle number you'd like to delete: ");
-				scanf("%i",&TempNum);
+				printf("\n\nEnter the rectangle name you'd like to delete: ");
+				TempNum=RectIdentify(RandomRect);
 				for (int i=0; i < (NumBoxes); i++)
 				{
-					RandomRect[TempNum-2+i]=RandomRect[TempNum-1+i];
+					RandomRect[TempNum-1+i]=RandomRect[TempNum+i];
 				}
 				NumBoxes-=1;
+				getch();
 				break;
 				
 			case '3':
 				printf("\n\nEnter the first rectangle to compare: ");
-				scanf("%i",&TempNum);
+				TempNum=RectIdentify(RandomRect);
 				printf("\n\nEnter the second rectangle to compare: ");
-				scanf("%i",&TempNum2);
-				Intersection(RandomRect[TempNum-1],RandomRect[TempNum2-1]);
+				TempNum2=RectIdentify(RandomRect);
+				Intersection(RandomRect[TempNum],RandomRect[TempNum2]);
+				getch();
+				
+				break;
+			
+			case '4':
+				printf("\n\nEnter the first rectangle to compare: ");
+				TempNum=RectIdentify(RandomRect);
+				printf("\n\nEnter the second rectangle to compare: ");
+				TempNum2=RectIdentify(RandomRect);
+				Union(RandomRect[TempNum],RandomRect[TempNum2]);
 				getch();
 				break;
 				
 			case '6':
-				printf("\n\nEnter the rectangle to compare: ");
-				scanf("%i",&TempNum3);
+				printf("\n\nEnter the rectangle name to compare: ");
+				TempNum3=RectIdentify(RandomRect);
 				printf("\n\nEnter the X coodinate: ");
 				scanf("%i",&TempNum);
 				printf("\n\nEnter the Y coodinate: ");
