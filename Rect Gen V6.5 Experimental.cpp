@@ -24,7 +24,6 @@ struct Rectangle
 //Random Number---------------------------------------------------------------------------------------
 int RandNum (int CharMin, int CharMax)
 {
-
 	return rand() % (CharMax - CharMin + 1) + CharMin;	
 }
 
@@ -32,8 +31,7 @@ int RandNum (int CharMin, int CharMax)
 int menu()
 {
 	printf("\n\n\n1 = Manual Input New Rect \n2 = Delete Existing Rect \n3 = Find Intersection \n4 = Find Union \n5 = Sort By Name \n6 = Point In Rectangle \n7 = Quit\n\nSelection? : ");
-	return (getch());
-	
+	return (getch());	
 }
 
 
@@ -68,8 +66,7 @@ Rectangle ManualRect ()
 	printf("\n\nEnter the rectangle left: ");
 	scanf("%i", &RandomRect.Left);
 	printf("\n\nEnter the rectangle right: ");
-	scanf("%i", &RandomRect.Right);
-	
+	scanf("%i", &RandomRect.Right);	
 	
 	RandomRect.Name[0]  = 0;
 	RandomRect.Name[1]  = 0;
@@ -85,8 +82,7 @@ Rectangle ManualRect ()
 			RandomRect.Name[ValidCount]=TempChar;
 			ValidCount++;
 		}					
-	} while (ValidCount<4);
-	
+	} while (ValidCount<4);	
 	return(RandomRect);
 }
 
@@ -96,30 +92,17 @@ const char *PointWithin(Rectangle Rect1,int X,int Y)
 	if (X>Rect1.Left && X<Rect1.Right && Y > Rect1.Bot && Y < Rect1.Top)
 		return ("\n\nThe point is within the rectangle.\n");
 	
-	return ("\n\nThe point is not within the rectangle.\n");
-	
-	
+	return ("\n\nThe point is not within the rectangle.\n");	
 }
 
 //Find Union--------------------------------------------------------------------
 
-void Union (Rectangle Rect2,Rectangle Rect1){
-	
-	//bool condition[8] = {Rect1.Left < Rect2.Right, Rect1.Bot < Rect2.Top, Rect2.Left < Rect1.Right, Rect2.Bot < Rect1.Top, Rect2.Left < Rect1.Right,
-//	Rect2.Bot < Rect1.Top, Rect1.Left < Rect2.Right,Rect1.Bot < Rect2.Top};
-//	bool condition2[4];	
-	
-//	if (condition[0] && condition[1] && condition[2] && condition[3] || condition[4] && condition[5] && condition[6] && condition[7]){
-
+void Union (Rectangle Rect2,Rectangle Rect1){	
 		printf("\n\nThe resulting rectangles points are: %i , %i    %i , %i\n\n",
 		(Rect1.Left > Rect2.Left) ? Rect2.Left:Rect1.Left, 
 		(Rect1.Bot > Rect2.Bot) ? Rect2.Bot:Rect1.Bot,  
 		(Rect1.Right < Rect2.Right) ? Rect2.Right:Rect1.Right, 
-		(Rect1.Top < Rect2.Top) ? Rect2.Top:Rect1.Top);
-
-	
-	
-	
+		(Rect1.Top < Rect2.Top) ? Rect2.Top:Rect1.Top);			
 }
 
 //Show Rects.------------------------------------------------------------------
@@ -209,24 +192,21 @@ int RectIdentify (Rectangle RandomRects[MAX_RECTS], int NumBoxes )
 		}					
 	} while (ValidCount<4);
 	
-
+	TempStr[4]=0;
 	
 	for (RectNum1=0 ; RectNum1 < MAX_RECTS + 1 ; RectNum1 ++)
 	{
-		
-	//	printf ("\n\n%s ---> %s : %i",RandomRects[RectNum1].Name,TempStr,strcmp(RandomRects[RectNum1].Name,TempStr));
-		
+	
+	//Enable this to see what its checking	
+	//	printf ("\n\n%s ---> %s : %i",RandomRects[RectNum1].Name,TempStr,strcmp(RandomRects[RectNum1].Name,TempStr));		
 		
 			if (strcmp(RandomRects[RectNum1].Name,TempStr) == 0)
 			{			
 				return (RectNum1);
 				break;
-			}	
-	
-		
-		
+			}
 	}
-		printf ("\n\n%s Is not a real rectangle. Returning to main menu.", TempStr);
+		printf ("\n\n%s\n Is not a real rectangle. Returning to main menu.", TempStr);
 		getch();
 		return(100);	
 
@@ -278,17 +258,19 @@ int main()
 		
 		switch (menu())
 		{
-			case '1':
-				if (NumBoxes==25) {				
-				system("cls");
-				PrintRect(RandomRect, NumBoxes);
-				printf("\n\n Too many rects. Press enter to begin entering the name of the rectangle you'd like to overwrite: ");
-				getch();
-				TempNum=RectIdentify(RandomRect, NumBoxes);
+				case '1':	//Manual Entry
+				if (NumBoxes==25) 
+				{				
+					system("cls");
+					PrintRect(RandomRect, NumBoxes);
+					printf("\n\n Too many rects. Press enter to begin entering the name of the rectangle you'd like to overwrite: ");
+					getch();
+					TempNum=RectIdentify(RandomRect, NumBoxes);
 				}
 				if (NumBoxes<25)
 					TempNum=30;
-				if (TempNum <= NumBoxes or TempNum == 30){
+				if (TempNum <= NumBoxes or TempNum == 30)
+				{
 					if (TempNum>NumBoxes)
 					{						
 						NumBoxes+=1;					
@@ -296,13 +278,14 @@ int main()
 					} else {				
 						RandomRect[TempNum]=ManualRect();
 					}
-				system("cls");
-				printf("Action Successful! Press Enter!");
-				getch();
+					system("cls");
+					printf("Action Successful! Press Enter!");
+					getch();
 				}
 				break;
 				
-			case '2':
+				
+			case '2'://Delete Existing
 				system("cls");
 				PrintRect(RandomRect, NumBoxes);
 				printf("\n\nPress enter to begin entering the name of the rectangle to delete...");
@@ -323,7 +306,7 @@ int main()
 				}
 				break;
 				
-			case '3':
+			case '3'://Intersection
 				system("cls");
 				PrintRect(RandomRect, NumBoxes);
 				printf("\n\nPress enter to begin entering the name of the first rectangle to compare: ");
@@ -336,14 +319,14 @@ int main()
 					if (TempNum <= NumBoxes && TempNum2 <= NumBoxes) {
 						Intersection(RandomRect[TempNum],RandomRect[TempNum2]);
 						getch();
-						//system("cls");
 						printf("\n\nAction Successful! Press Enter!");
 						getch();
 					}	
 				}
 				break;
 			
-			case '4':
+			
+			case '4'://Find Union
 				system("cls");
 				PrintRect(RandomRect, NumBoxes);
 				printf("\n\nPress enter to begin entering the name of the first rectangle to compare: ");
@@ -355,19 +338,20 @@ int main()
 					TempNum2=RectIdentify(RandomRect, NumBoxes);
 					if (TempNum <= NumBoxes && TempNum2 <= NumBoxes) {
 						Union(RandomRect[TempNum],RandomRect[TempNum2]);
-						//system("cls");
 						printf("\n\nAction Successful! Press Enter!");
 						getch();
 					}
 				}
 				break;
 			
-			case '5':
+			
+			case '5'://Sort by Name
 				SortByName(RandomRect,NumBoxes);
 				break;
 				
+				
 			case '6':
-				system("cls");
+				system("cls");//Point Within?
 				PrintRect(RandomRect, NumBoxes);
 				printf("\n\nPress enter to begin entering the name of the rectangle name to compare: ");
 				TempNum3=RectIdentify(RandomRect, NumBoxes);
@@ -375,16 +359,15 @@ int main()
 					printf("\n\nEnter the X coodinate: ");
 					scanf("%i",&TempNum);
 					printf("\n\nEnter the Y coodinate: ");
-					scanf("%i",&TempNum2);		
-					
-						printf("\n%s",PointWithin(RandomRect[TempNum3],TempNum,TempNum2));
-					//	system("cls");
-						printf("\nAction Successful! Press Enter!");
-						getch();
+					scanf("%i",&TempNum2);						
+					printf("\n%s",PointWithin(RandomRect[TempNum3],TempNum,TempNum2));
+					printf("\nAction Successful! Press Enter!");
+					getch();
 				}
 				break;
 				
-			case '7':
+				
+			case '7'://Exit Prog
 				Run=false;
 				break;
 			
@@ -395,7 +378,7 @@ int main()
 				break;
 				
 			default:
-				printf("\n Either invalid selection or not yet implemented feature :(");		
+				printf("\n Either invalid selection :(");		
 		}
 	
 	}while(Run==true);
