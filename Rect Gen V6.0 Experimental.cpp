@@ -213,25 +213,22 @@ int RectIdentify (Rectangle RandomRects[MAX_RECTS], int NumBoxes )
 	
 	for (RectNum1=0 ; RectNum1 < MAX_RECTS + 1 ; RectNum1 ++)
 	{
-		//for (int i = 0; i < 5; i++)
-	//	{
-			//if (RandomRects[RectNum1].Name[i] != TempStr[i])
-			if (strcmp(RandomRects[RectNum1].Name,TempStr) != 0)
-				break;
-			//if (RandomRects[RectNum1].Name[i] == TempStr[i] && i == 4)
+		
+	//	printf ("\n\n%s ---> %s : %i",RandomRects[RectNum1].Name,TempStr,strcmp(RandomRects[RectNum1].Name,TempStr));
+		
+		
 			if (strcmp(RandomRects[RectNum1].Name,TempStr) == 0)
 			{			
 				return (RectNum1);
 				break;
-			}
-		//	}	
+			}	
 	
-			printf ("\n\n %s  Is not a real rectangle. Returning to main menu.", TempStr);
-			getch();
-			return(100);
+		
 		
 	}
-		
+		printf ("\n\n%s Is not a real rectangle. Returning to main menu.", TempStr);
+		getch();
+		return(100);	
 
 }
 
@@ -245,6 +242,15 @@ int main()
 	int NumBoxes= 100;
 	int TempNum,TempNum2,TempNum3;
 
+	r.Bot   = 0;
+	r.Top	= 0;
+	r.Left  = 0;
+	r.Right = 0;
+	r.Name[0]  = 0;
+	r.Name[1]  = 0;
+	r.Name[2]  = 0;
+	r.Name[3]  = 0;
+	r.Name[4]  = 0;
 	
 	//How many you want?
 	while (NumBoxes>25)
@@ -257,9 +263,13 @@ int main()
 	//Initialize Boxes
 	for (int i=0; i < MAX_RECTS; i++)
 	{	
-		RandomRect[i] = GenRect();		
+		if (i <= NumBoxes)
+			RandomRect[i] = GenRect();
+		if 	(i >= NumBoxes)	
+			RandomRect[i] = GenRect();
+		
 	}
-	
+
 	//Main Run Loop
 	do
 	{
@@ -269,19 +279,23 @@ int main()
 		switch (menu())
 		{
 			case '1':
+				if (NumBoxes==25) {				
 				system("cls");
 				PrintRect(RandomRect, NumBoxes);
-				printf("\n\nPress enter to begin entering the name of the rectangle you'd like to write to: ");
+				printf("\n\n Too many rects. Press enter to begin entering the name of the rectangle you'd like to overwrite: ");
 				getch();
 				TempNum=RectIdentify(RandomRect, NumBoxes);
-				if (TempNum <= NumBoxes){
-				if (TempNum>NumBoxes)
-				{
-					NumBoxes+=1;
-					RandomRect[NumBoxes]=ManualRect();
-				} else {				
-					RandomRect[TempNum]=ManualRect();
 				}
+				if (NumBoxes<25)
+					TempNum=30;
+				if (TempNum <= NumBoxes or TempNum == 30){
+					if (TempNum>NumBoxes)
+					{						
+						NumBoxes+=1;					
+						RandomRect[NumBoxes-1]=ManualRect();
+					} else {				
+						RandomRect[TempNum]=ManualRect();
+					}
 				system("cls");
 				printf("Action Successful! Press Enter!");
 				getch();
@@ -294,11 +308,13 @@ int main()
 				printf("\n\nPress enter to begin entering the name of the rectangle to delete...");
 				getch();
 				TempNum=RectIdentify(RandomRect, NumBoxes);
+				system("cls");
+				printf("\n\nDeleting. May Take a minute...");
 				if (TempNum <= NumBoxes)
 				{
-					for (int i=TempNum; i < (NumBoxes); i++)
+					for (int i=TempNum; i <= NumBoxes; i++)
 					{
-						RandomRect[TempNum+i]=RandomRect[TempNum+i+1];
+						RandomRect[i]=RandomRect[i+1];
 					}
 					NumBoxes-=1;
 					system("cls");
@@ -311,16 +327,18 @@ int main()
 				system("cls");
 				PrintRect(RandomRect, NumBoxes);
 				printf("\n\nPress enter to begin entering the name of the first rectangle to compare: ");
-				TempNum=RectIdentify(RandomRect, NumBoxes);
-				printf("\n\nPress enter to begin entering the name of the second rectangle to compare: ");
-				TempNum2=RectIdentify(RandomRect, NumBoxes);
-				if (TempNum <= NumBoxes && TempNum2 <= NumBoxes) {
-				Intersection(RandomRect[TempNum],RandomRect[TempNum2]);
-				getch();
-				system("cls");
-				printf("Action Successful! Press Enter!");
-				getch();
-				}	
+				if (TempNum <= NumBoxes){				
+					TempNum=RectIdentify(RandomRect, NumBoxes);
+					printf("\n\nPress enter to begin entering the name of the second rectangle to compare: ");
+					TempNum2=RectIdentify(RandomRect, NumBoxes);
+					if (TempNum <= NumBoxes && TempNum2 <= NumBoxes) {
+						Intersection(RandomRect[TempNum],RandomRect[TempNum2]);
+						getch();
+						//system("cls");
+						printf("\n\nAction Successful! Press Enter!");
+						getch();
+					}	
+				}
 				break;
 			
 			case '4':
@@ -328,13 +346,15 @@ int main()
 				PrintRect(RandomRect, NumBoxes);
 				printf("\n\nPress enter to begin entering the name of the first rectangle to compare: ");
 				TempNum=RectIdentify(RandomRect, NumBoxes);
-				printf("\n\nPress enter to begin entering the name of the second rectangle to compare: ");
-				TempNum2=RectIdentify(RandomRect, NumBoxes);
-				if (TempNum <= NumBoxes && TempNum2 <= NumBoxes) {
-				Union(RandomRect[TempNum],RandomRect[TempNum2]);
-				system("cls");
-				printf("Action Successful! Press Enter!");
-				getch();
+				if (TempNum <= NumBoxes){
+					printf("\n\nPress enter to begin entering the name of the second rectangle to compare: ");
+					TempNum2=RectIdentify(RandomRect, NumBoxes);
+					if (TempNum <= NumBoxes && TempNum2 <= NumBoxes) {
+						Union(RandomRect[TempNum],RandomRect[TempNum2]);
+						//system("cls");
+						printf("\n\nAction Successful! Press Enter!");
+						getch();
+					}
 				}
 				break;
 			
@@ -347,15 +367,16 @@ int main()
 				PrintRect(RandomRect, NumBoxes);
 				printf("\n\nPress enter to begin entering the name of the rectangle name to compare: ");
 				TempNum3=RectIdentify(RandomRect, NumBoxes);
-				printf("\n\nEnter the X coodinate: ");
-				scanf("%i",&TempNum);
-				printf("\n\nEnter the Y coodinate: ");
-				scanf("%i",&TempNum2);				
-				if (TempNum <= NumBoxes && TempNum2 <= NumBoxes) {
-				printf("\n%s",PointWithin(RandomRect[TempNum3],TempNum,TempNum2));
-				system("cls");
-				printf("Action Successful! Press Enter!");
-				getch();
+				if (TempNum <= NumBoxes){
+					printf("\n\nEnter the X coodinate: ");
+					scanf("%i",&TempNum);
+					printf("\n\nEnter the Y coodinate: ");
+					scanf("%i",&TempNum2);		
+					
+						printf("\n%s",PointWithin(RandomRect[TempNum3],TempNum,TempNum2));
+					//	system("cls");
+						printf("\nAction Successful! Press Enter!");
+						getch();
 				}
 				break;
 				

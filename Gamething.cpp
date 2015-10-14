@@ -19,43 +19,40 @@ void DrawGrid (char GmBoard[ROWS][COLS], int CharX, int CharY){
      
 }
 
-void ArrowKeys(int *ChXP,int *ChYP){
+int ArrowKeys()
+{
+char Move;
 	bool moved = false;
 	while (moved==false){
 	 if (getch()==224){
           switch(getch()) {
-                      case 72:
-                      	
-                           if (*ChYP>0)						   
-                           		*ChYP--;
+                      case 72:                   	
+                       	Move='u';
                            moved = true;
+                           
                            break;
                        	   
                       case 80:
-                           if (*ChYP < COLS-1)					
-                          		 *ChYP++;
+                          	Move='d';
 						   moved = true;
                            break;
                            
                       case 75:
-                           if (*ChXP > 0)					   
-                          		 *ChXP--;						   
+                          	 Move='l';						   
                            moved = true;
                            break;
                            
                       case 77:
-                           if (*ChXP < COLS-1)					   
-                           		*ChXP++;                           
+                           	Move='r' ;                         
                            moved = true;
                            break;   
 					       
                          }
                       }
          }
-         printf("Char Y cord pointer : - %i -, Char x cord pointer : - %i -\n",&ChYP,&ChXP);
-		 printf("Char Y Cord (normally 9): - %i - ,Char x Cord (normally 9): - %i -\n",*ChYP,*ChXP);
+        
       moved = false;
-      system("pause");
+      return Move;
 }
  
 int main (){    
@@ -87,7 +84,28 @@ int main (){
           //scanf("%c",&Inp);
           Board[ChX][ChY]='#';
           //printf("%s",PlayerInv[1]);
-           ArrowKeys(ChXP,ChYP);
+           
+           switch(ArrowKeys()) {
+                      case 'u':
+                           if (ChY>0)
+                           ChY--;
+                           break;
+                      case 'd':
+                           if (ChY<COLS-1)
+                           ChY++;
+                           break;
+                      case 'l':
+                           if (ChX>0)
+                           ChX--;
+                           break;
+                      case 'r':
+                           if (ChX<COLS-1)
+                           ChX++;
+                           break;  
+                      default:
+                              printf("\n");                    
+                      }
+          
            /*
           switch(ChX,ChY){
               case (13|10):

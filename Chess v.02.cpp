@@ -25,15 +25,15 @@ void DrawBoard (char ChessBoard[ROWS][COLS][2])
 					{					
 						case 'b':
 							SetConsoleTextAttribute(hConsole, 112);
-    						printf(" %c",ChessBoard[j][i][0]);    				
+    						printf("%c",(i*10)+j,ChessBoard[j][i][0]);    				
     						break;
     					case 'r':
     						SetConsoleTextAttribute(hConsole, 124);
-    						printf(" %c",ChessBoard[j][i][0]);    				
+    						printf("%c",(i*10)+j,ChessBoard[j][i][0]);    				
     						break;
     					default:
     						SetConsoleTextAttribute(hConsole, 127);
-    						printf(" %c",ChessBoard[j][i][0]);    				
+    						printf("%c",(i*10)+j,ChessBoard[j][i][0]);    				
     						break;
     					   						
 					}
@@ -42,15 +42,15 @@ void DrawBoard (char ChessBoard[ROWS][COLS][2])
 					{					
 						case 'b':
 							SetConsoleTextAttribute(hConsole, 128);
-    						printf(" %c",ChessBoard[j][i][0]);    				
+    						printf("%c",(i*10)+j,ChessBoard[j][i][0]);    				
     						break;
     					case 'r':
     						SetConsoleTextAttribute(hConsole, 140);
-    						printf(" %c",ChessBoard[j][i][0]);    				
+    						printf("%c",(i*10)+j,ChessBoard[j][i][0]);    				
     						break;
     					default:
     						SetConsoleTextAttribute(hConsole, 128);
-    						printf(" %c",ChessBoard[j][i][0]);    				
+    						printf("%c",(i*10)+j,ChessBoard[j][i][0]);    				
     						break;    					
 					}
 					break;		
@@ -68,14 +68,25 @@ void DrawBoard (char ChessBoard[ROWS][COLS][2])
 
 int main () 
 {
+	int ii,jj;
 	char ChessBoard [ROWS][COLS][2];
 	HANDLE  hConsole;	
     hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
 	for(int i=0;i<ROWS;i++){              
-              for(int j=0;j<COLS;j++){            	
-            		ChessBoard[i][j][0]=' ';
-					ChessBoard[i][j][1]=' '; 
+              for(int j=0;j<COLS;j++){   
+			  		
+					   	if ((i*10+j)>= 28 and (i*10+j) <= 46)
+						{
+							ChessBoard[i][j][0]=' ';            		
+							ChessBoard[i][j][1]=' ';						
+						}	else if	((i*10+j)>=28 and (i*10+j)%2==1) {
+							ChessBoard[i][j][0]='o';            		
+							ChessBoard[i][j][1]='b';						
+						}   else if ((i*10+j)<=48 and (i*10+j)%2==1){
+							ChessBoard[i][j][0]='o';            		
+							ChessBoard[i][j][1]='r';
+						}  
               }             
     }
     
